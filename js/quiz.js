@@ -5,6 +5,10 @@ var options= document.querySelectorAll(".btn");
 var random = Math.floor(Math.random()*options.length);
 const nextBtn = document.getElementById("next");
 const massage =document.getElementById("result")
+const resultDisplay =  document.getElementById("resultShow");
+const heading = document.getElementById("heading");
+
+
 callApi();
 
 function callApi (){
@@ -60,38 +64,51 @@ function boxHendeler (result){
     }
     var optionsST= document.querySelectorAll(".btn")
     optionClick(optionsST);
+    nextBtnDisable();
 }
 
-
+let click = 0;
 let optionClick = (option) => {
     const optionBtn = option;
     optionBtn.forEach(btn => {
-        const Btn = btn;
+        const Btn = btn; 
        Btn.addEventListener('click', ()=>{
             optionCheck(Btn);
             btnDisable();
+            nextBtnEnable();
        })
     });
 }
 
+var wrong = 0;
+var right = 0;
+
 let optionCheck = (text) =>{
     const btnText = text.textContent;
     nextBtn.style.display = "block";
-    console.log(btnText)
-    console.log(cAnsData)
+    nextBtn.disabled = true;
    if(btnText === cAnsData){
     rightMassage(text)
+    right++;
    }
    else{
-    wrongMassage(text)
+    wrongMassage(text);
+    wrong++;
    }
-
 }
+
 const btnDisable = ()=>{
     var optionsST= document.querySelectorAll(".btn")
     optionsST.forEach(element => {
         element.disabled = true;
     });
+}
+const nextBtnEnable = () => {
+    nextBtn.disabled = false;
+    nextBtn.style.display = 'block';
+}
+const nextBtnDisable = () => {
+    nextBtn.disabled = true;
 }
 
 const wrongMassage = (div) => {
@@ -104,10 +121,47 @@ const wrongMassage = (div) => {
 
 const rightMassage = (div) =>{
     const right = div;
-    console.log(right)
     right.style.background ="#3ef4a5"
 }
 
+ let  count = 0;
 nextBtn.addEventListener("click", () =>{
-    location.reload()
+    nextBtn.disabled = true;
+    optionBox.innerHTML = "";
+    question.innerHTML = "";
+    massage.innerHTML = "";
+    callApi();
+    // console.log("click")
+    resultManaz( count++);
 })
+
+let resultManaz = (c)=>{
+
+    let wrongValue =  wrong; 
+    let rightValue =  right; 
+
+    if(c === 4){
+        result ();
+    }
+
+}
+
+let result = () =>{
+    heading.innerHTML = " Your Result";
+    optionBox.style.display = "none";
+    question.style.display = "none";
+    massage.style.display = "none";
+    nextBtn.style.display = "none";
+
+   resultDisplay.innerHTML = `
+   <h3>You play <strong>${count}</strong> times.</h3>
+   <h4>You right anwser-  <strong>${right}</strong> times.</h4>
+   <h4>You wrong anwser-  <strong>${wrong}</strong> times.</h4>
+   `
+   const rest =  document.getElementById("ref");
+   rest.style.display = 'block';
+   rest.addEventListener("click", ()=>{
+    window.location.replace(window.location.href);
+   })
+
+}
