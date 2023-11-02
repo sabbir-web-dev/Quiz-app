@@ -22,11 +22,8 @@ function callApi (){
         const questions = dataIs[randomNumber];
         optionHendel(questions);
         question.innerHTML = questions.question;
-
-       
-
     })
-    .catch(err => console.log(err))
+    .catch(error => console.log(error))
 }
 
 let cAnsData = '' ;
